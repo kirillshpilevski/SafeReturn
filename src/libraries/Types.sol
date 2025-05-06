@@ -9,6 +9,12 @@ library Types {
         Cancelled
     }
 
+    enum RecoveryState {
+        Normal,
+        Frozen,
+        Thawed
+    }
+
     struct WithdrawalRequest {
         uint256 id;
         address requester;
