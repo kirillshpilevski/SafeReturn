@@ -11,8 +11,14 @@ interface IWithdrawalRequestModule {
         uint256 amount,
         uint256 releaseTimestamp
     );
+    event WithdrawalCancelled(uint256 indexed requestId);
+    event WithdrawalFinalized(uint256 indexed requestId);
 
     function createRequest(address asset, uint256 amount, uint256 delay, bytes calldata metadata)
         external
         returns (uint256);
+
+    function cancelRequest(uint256 requestId) external;
+    function finalizeRequest(uint256 requestId) external;
+    function getRequest(uint256 requestId) external view returns (Types.WithdrawalRequest memory);
 }
