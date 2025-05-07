@@ -26,3 +26,9 @@ library Types {
         bytes metadata;
     }
 }
+
+    struct Approval {
+        address approver;
+        uint256 timestamp;
+        bool approved;
+    }
