@@ -13,9 +13,38 @@ contract WithdrawalRequestModule is Initializable, IWithdrawalRequestModule {
     uint256 public minDelay;
     uint256 public maxDelay;
 
+    error InvalidDelay();
+
     function __WithdrawalRequestModule_init(uint256 _minDelay, uint256 _maxDelay) internal onlyInitializing {
         minDelay = _minDelay;
         maxDelay = _maxDelay;
         _nextRequestId = 1;
+    }
+
+    function createRequest(address asset, uint256 amount, uint256 delay, bytes calldata metadata)
+        public
+        returns (uint256)
+    {
+        if (delay < minDelay || delay > maxDelay) revert InvalidDelay();
+
+        uint256 requestId = _nextRequestId++;
+        uint256 releaseTimestamp = block.timestamp + delay;
+
+        _requests[requestId] = Types.WithdrawalRequest({
+            id: requestId,
+            requester: msg.sender,
+            asset: asset,
+            amount: amount,
+            requestTimestamp: block.timestamp,
+            releaseTimestamp: releaseTimestamp,
+            status: Types.RequestStatus.Pending,
+            metadata: metadata
+        });
+
+        _userRequests[msg.sender].push(requestId);
+
+        emit WithdrawalRequested(requestId, msg.sender, asset, amount, releaseTimestamp);
+
+        return requestId;
     }
 }
