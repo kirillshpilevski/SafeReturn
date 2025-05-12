@@ -14,6 +14,9 @@ contract WithdrawalRequestModule is Initializable, IWithdrawalRequestModule {
     uint256 public maxDelay;
 
     error InvalidDelay();
+    error RequestNotFound();
+    error UnauthorizedCancellation();
+    error InvalidStatus();
 
     function __WithdrawalRequestModule_init(uint256 _minDelay, uint256 _maxDelay) internal onlyInitializing {
         minDelay = _minDelay;
@@ -46,5 +49,34 @@ contract WithdrawalRequestModule is Initializable, IWithdrawalRequestModule {
         emit WithdrawalRequested(requestId, msg.sender, asset, amount, releaseTimestamp);
 
         return requestId;
+    }
+
+    function cancelRequest(uint256 requestId) external {
+        Types.WithdrawalRequest storage request = _requests[requestId];
+        if (request.id == 0) revert RequestNotFound();
+        if (request.requester != msg.sender) revert UnauthorizedCancellation();
+        if (request.status != Types.RequestStatus.Pending) revert InvalidStatus();
+
+        request.status = Types.RequestStatus.Cancelled;
+
+        emit WithdrawalCancelled(requestId);
+    }
+
+    function finalizeRequest(uint256 requestId) public {
+        Types.WithdrawalRequest storage request = _requests[requestId];
+        if (request.id == 0) revert RequestNotFound();
+        if (request.status != Types.RequestStatus.Approved) revert InvalidStatus();
+
+        request.status = Types.RequestStatus.Executed;
+
+        emit WithdrawalFinalized(requestId);
+    }
+
+    function getRequest(uint256 requestId) public view returns (Types.WithdrawalRequest memory) {
+        return _requests[requestId];
+    }
+
+    function getUserRequests(address user) external view returns (uint256[] memory) {
+        return _userRequests[user];
     }
 }
