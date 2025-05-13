@@ -15,9 +15,25 @@ contract ApprovalModule is Initializable, AccessControlUpgradeable, IApprovalMod
     uint256 public approvalThreshold;
     uint256 public fastTrackLimit;
 
+    error AlreadyApproved();
+
     function __ApprovalModule_init(uint256 _threshold, uint256 _fastTrackLimit) internal onlyInitializing {
         __AccessControl_init();
         approvalThreshold = _threshold;
         fastTrackLimit = _fastTrackLimit;
+    }
+
+    function approveRequest(uint256 requestId) public onlyRole(ADMIN_ROLE) {
+        if (_approvals[requestId][msg.sender].approved) revert AlreadyApproved();
+
+        _approvals[requestId][msg.sender] = Types.Approval({
+            approver: msg.sender,
+            timestamp: block.timestamp,
+            approved: true
+        });
+
+        _approvalCounts[requestId]++;
+
+        emit RequestApproved(requestId, msg.sender);
     }
 }
