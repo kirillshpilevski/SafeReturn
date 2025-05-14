@@ -59,3 +59,14 @@ contract ApprovalModule is Initializable, AccessControlUpgradeable, IApprovalMod
         return _approvalCounts[requestId];
     }
 }
+
+    function updateThreshold(uint256 newThreshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        approvalThreshold = newThreshold;
+        emit ThresholdUpdated(newThreshold);
+    }
+
+    function updateFastTrackLimit(uint256 newLimit) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        fastTrackLimit = newLimit;
+        emit FastTrackLimitUpdated(newLimit);
+    }
+}
