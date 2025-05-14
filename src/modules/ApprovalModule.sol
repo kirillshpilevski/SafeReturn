@@ -36,4 +36,26 @@ contract ApprovalModule is Initializable, AccessControlUpgradeable, IApprovalMod
 
         emit RequestApproved(requestId, msg.sender);
     }
+
+    function rejectRequest(uint256 requestId) external onlyRole(ADMIN_ROLE) {
+        _approvals[requestId][msg.sender] = Types.Approval({
+            approver: msg.sender,
+            timestamp: block.timestamp,
+            approved: false
+        });
+
+        emit RequestRejected(requestId, msg.sender);
+    }
+
+    function isApproved(uint256 requestId) external view returns (bool) {
+        return _approvalCounts[requestId] >= approvalThreshold;
+    }
+
+    function canFastTrack(uint256 amount) public view returns (bool) {
+        return amount <= fastTrackLimit;
+    }
+
+    function getApprovalCount(uint256 requestId) external view returns (uint256) {
+        return _approvalCounts[requestId];
+    }
 }
