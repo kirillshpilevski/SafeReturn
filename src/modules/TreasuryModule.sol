@@ -20,4 +20,17 @@ contract TreasuryModule is Initializable, ReentrancyGuardUpgradeable, ITreasuryM
         __ReentrancyGuard_init();
         usdcAddress = _usdcAddress;
     }
+
+    function deposit(address asset, uint256 amount) external nonReentrant {
+        if (asset == address(0)) revert InvalidAsset();
+
+        IERC20Upgradeable(asset).safeTransferFrom(msg.sender, address(this), amount);
+        _balances[asset] += amount;
+
+        emit Deposit(asset, amount, msg.sender);
+    }
+
+    function getBalance(address asset) external view returns (uint256) {
+        return _balances[asset];
+    }
 }
