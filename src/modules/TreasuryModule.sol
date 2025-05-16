@@ -30,7 +30,24 @@ contract TreasuryModule is Initializable, ReentrancyGuardUpgradeable, ITreasuryM
         emit Deposit(asset, amount, msg.sender);
     }
 
+    function executeWithdrawal(uint256 requestId) external nonReentrant {
+        emit ExecutionPrepared(requestId, address(0), 0);
+    }
+
+    function _executeTransfer(address asset, address to, uint256 amount) internal {
+        if (_balances[asset] < amount) revert InsufficientBalance();
+
+        _balances[asset] -= amount;
+        IERC20Upgradeable(asset).safeTransfer(to, amount);
+
+        emit Withdrawal(asset, amount, to);
+    }
+
     function getBalance(address asset) external view returns (uint256) {
         return _balances[asset];
+    }
+
+    function getTotalBalance(address asset) external view returns (uint256) {
+        return IERC20Upgradeable(asset).balanceOf(address(this));
     }
 }
