@@ -12,6 +12,11 @@ remappings = [
     "openzeppelin-contracts/=lib/openzeppelin-contracts/"
 ]
 
+fs_permissions = [
+    { access = "read-write", path = "./deployments" },
+    { access = "read-write", path = "./broadcast" }
+]
+
 [rpc_endpoints]
 base-sepolia = "https://sepolia.base.org"
 base = "https://mainnet.base.org"
