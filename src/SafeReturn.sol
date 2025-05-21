@@ -75,6 +75,20 @@ contract SafeReturn is
         return requestId;
     }
 
+    function isWithdrawalReady(uint256 requestId) external view returns (bool) {
+        Types.WithdrawalRequest memory request = getRequest(requestId);
+        return request.status == Types.RequestStatus.Approved && block.timestamp >= request.releaseTimestamp
+            && isOperational();
+    }
+
+    function getSystemStatus()
+        external
+        view
+        returns (Types.RecoveryState recoveryState, uint256 currentThreshold, uint256 currentFastTrackLimit)
+    {
+        return (getRecoveryState(), approvalThreshold, fastTrackLimit);
+    }
+
     function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
     function version() public pure virtual returns (string memory) {
