@@ -72,3 +72,25 @@ contract SafeReturnTest is Test {
         assertEq(safeReturn.version(), "1.0.0");
     }
 }
+
+    function testApproveRequest() public {
+        vm.prank(user);
+        uint256 requestId = safeReturn.createRequest(address(usdc), 100 * 1e6, 2 hours, "");
+
+        safeReturn.approveRequest(requestId);
+        assertEq(safeReturn.getApprovalCount(requestId), 1);
+    }
+
+    function testDepositAndWithdrawal() public {
+        usdc.mint(address(this), 1000 * 1e6);
+        usdc.approve(address(safeReturn), 1000 * 1e6);
+
+        safeReturn.deposit(address(usdc), 1000 * 1e6);
+        assertEq(safeReturn.getBalance(address(usdc)), 1000 * 1e6);
+    }
+
+    function testFreezeVault() public {
+        safeReturn.freezeVault();
+        assertEq(uint256(safeReturn.getRecoveryState()), uint256(Types.RecoveryState.Frozen));
+    }
+}
