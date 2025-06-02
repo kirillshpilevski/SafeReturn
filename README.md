@@ -1,66 +1,37 @@
-## Foundry
+# SafeReturn
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Secure, upgradeable asset-recovery and controlled withdrawal system for Base network.
 
-Foundry consists of:
+## Overview
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+SafeReturn provides a trustworthy, governance-aware mechanism for managing protected funds, delayed withdrawals, automated recovery logic, and USDC payouts through Base Pay integration.
 
-## Documentation
+## Architecture
 
-https://book.getfoundry.sh/
+### Core Modules
 
-## Usage
+- **WithdrawalRequestModule**: Request management with timelock mechanics
+- **ApprovalModule**: Multi-role approval system with threshold-based logic
+- **TreasuryModule**: USDC vault with Base Pay integration
+- **RecoveryModule**: Emergency freeze/thaw state machine
+- **UpgradeModule**: UUPS upgradeable pattern for long-term maintainability
 
-### Build
+### Roles
 
-```shell
-$ forge build
+- **Owner**: Contract owner with upgrade rights
+- **Admin**: Can approve requests and manage thresholds
+- **Guardian**: Emergency recovery and vault freeze capabilities
+- **Executor**: Execute approved withdrawals
+
+## Development
+
+```bash
+forge build
+forge test
 ```
 
-### Test
+## Deployment
 
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+```bash
+forge script script/DeploySafeReturn.s.sol --rpc-url base-sepolia --broadcast
 ```
