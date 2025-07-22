@@ -14,8 +14,7 @@ contract WithdrawalRequestModuleTest is Test {
 
     function setUp() public {
         SafeReturn implementation = new SafeReturn();
-        bytes memory initData =
-            abi.encodeCall(SafeReturn.initialize, (owner, mockUsdc, 1 hours, 7 days, 2, 1000 * 1e6));
+        bytes memory initData = abi.encodeCall(SafeReturn.initialize, (owner, mockUsdc, 1 hours, 7 days, 2, 1000 * 1e6));
         ERC1967Proxy proxy = new ERC1967Proxy(address(implementation), initData);
         safeReturn = SafeReturn(address(proxy));
     }

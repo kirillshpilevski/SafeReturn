@@ -22,8 +22,7 @@ contract DeploySafeReturn is Script {
         implementation = address(new SafeReturn());
 
         bytes memory initData = abi.encodeCall(
-            SafeReturn.initialize,
-            (deployer, usdcAddress, minDelay, maxDelay, approvalThreshold, fastTrackLimit)
+            SafeReturn.initialize, (deployer, usdcAddress, minDelay, maxDelay, approvalThreshold, fastTrackLimit)
         );
 
         proxy = address(new ERC1967Proxy(implementation, initData));
