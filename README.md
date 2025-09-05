@@ -35,3 +35,22 @@ forge test
 ```bash
 forge script script/DeploySafeReturn.s.sol --rpc-url base-sepolia --broadcast
 ```
+
+## Features
+
+- Timelock-protected withdrawals
+- Multi-signature approval system
+- Fast-track mode for small amounts
+- Emergency vault freeze
+- UUPS upgradeable proxies
+- Base network optimized
+
+## Testing
+
+```bash
+forge test -vv
+```
+
+## Security
+
+All contracts upgradeable using UUPS with strict access controls.
