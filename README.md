@@ -54,3 +54,7 @@ forge test -vv
 ## Security
 
 All contracts upgradeable using UUPS with strict access controls.
+
+## License
+
+MIT
