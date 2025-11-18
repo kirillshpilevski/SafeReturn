@@ -71,7 +71,6 @@ contract SafeReturnTest is Test {
     function testVersion() public view {
         assertEq(safeReturn.version(), "1.0.0");
     }
-}
 
     function testApproveRequest() public {
         vm.prank(user);

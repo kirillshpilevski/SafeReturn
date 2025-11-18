@@ -58,7 +58,6 @@ contract ApprovalModule is Initializable, AccessControlUpgradeable, IApprovalMod
     function getApprovalCount(uint256 requestId) external view returns (uint256) {
         return _approvalCounts[requestId];
     }
-}
 
     function updateThreshold(uint256 newThreshold) external onlyRole(DEFAULT_ADMIN_ROLE) {
         approvalThreshold = newThreshold;
