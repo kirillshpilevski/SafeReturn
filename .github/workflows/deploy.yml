@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy SafeReturn
 
 on:
   workflow_dispatch:
@@ -15,21 +15,49 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
 
-      - name: Install dependencies
+      - name: Update submodules
         run: git submodule update --init --recursive
+
+      - name: Build contracts
+        run: forge build --sizes
 
       - name: Deploy contracts
         env:
-          PRIVATE_KEY: \${{ secrets.PRIVATE_KEY }}
-          BASESCAN_API_KEY: \${{ secrets.BASESCAN_API_KEY }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          BASESCAN_API_KEY: ${{ secrets.BASESCAN_API_KEY }}
         run: |
+          echo "🚀 Deploying SafeReturn to ${{ inputs.network }}..."
+
           forge script script/DeploySafeReturn.s.sol \
-            --rpc-url \${{ inputs.network }} \
-            --broadcast
+            --rpc-url ${{ inputs.network }} \
+            --broadcast \
+            --verify \
+            -vvvv
+
+          echo "✅ Deployment complete!"
+
+      - name: Upload deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-${{ inputs.network }}-${{ github.run_number }}
+          path: |
+            broadcast/
+            deployments/
+
+      - name: Comment deployment info
+        if: success()
+        run: |
+          echo "## ✅ Deployment Successful!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Network:** ${{ inputs.network }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run:** #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check artifacts for deployment addresses." >> $GITHUB_STEP_SUMMARY
