@@ -25,10 +25,10 @@ library Types {
         RequestStatus status;
         bytes metadata;
     }
-}
 
-struct Approval {
-    address approver;
-    uint256 timestamp;
-    bool approved;
+    struct Approval {
+        address approver;
+        uint256 timestamp;
+        bool approved;
+    }
 }
