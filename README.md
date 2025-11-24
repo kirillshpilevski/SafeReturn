@@ -45,6 +45,16 @@ forge script script/DeploySafeReturn.s.sol --rpc-url base-sepolia --broadcast
 - UUPS upgradeable proxies
 - Base network optimized
 
+## Deployed Contracts
+
+### Base Sepolia (Testnet)
+
+- **Proxy**: [`0x24766824e574A438C9c3BFf370755B627e600B3E`](https://sepolia.basescan.org/address/0x24766824e574a438c9c3bff370755b627e600b3e)
+- **Implementation**: [`0xA74062ae0B7A071627130b1A0C543B411982b5bD`](https://sepolia.basescan.org/address/0xa74062ae0b7a071627130b1a0c543b411982b5bd)
+- **Status**: ✅ Verified
+
+See [deployments](./deployments) directory for detailed configuration and testing commands.
+
 ## Testing
 
 ```bash
