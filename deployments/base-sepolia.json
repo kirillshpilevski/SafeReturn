@@ -1,0 +1,24 @@
+{
+  "network": "base-sepolia",
+  "chainId": 84532,
+  "deployedAt": "2025-11-24T12:00:00Z",
+  "contracts": {
+    "SafeReturn": {
+      "implementation": "0xA74062ae0B7A071627130b1A0C543B411982b5bD",
+      "proxy": "0x24766824e574A438C9c3BFf370755B627e600B3E",
+      "verified": true
+    }
+  },
+  "parameters": {
+    "owner": "0x636591E387015A4462B3D5F189a5Da1F4Ed156F8",
+    "usdcAddress": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    "minDelay": 3600,
+    "maxDelay": 604800,
+    "approvalThreshold": 2,
+    "fastTrackLimit": 1000000000
+  },
+  "links": {
+    "implementation": "https://sepolia.basescan.org/address/0xa74062ae0b7a071627130b1a0c543b411982b5bd",
+    "proxy": "https://sepolia.basescan.org/address/0x24766824e574a438c9c3bff370755b627e600b3e"
+  }
+}
